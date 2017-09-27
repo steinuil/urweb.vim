@@ -13,7 +13,8 @@ I use Pathogen, so that's what these instructions are for. Feel free to contribu
 First of all, install [Pathogen](https://github.com/tpope/vim-pathogen).
 
 ```
-https://github.com/steinuil/urweb.vim
+cd ~/.vim/bundle
+git clone https://github.com/steinuil/urweb.vim
 ```
 
 # Features

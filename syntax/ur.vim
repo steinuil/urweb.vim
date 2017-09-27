@@ -19,9 +19,7 @@ syn keyword urWildcard _
 
 syn match urChar /#"[^\\]"\|#"\\[\\"'nrt]"\|#"\d\{3\}"\|#"\\x\x\{2\}"/
 
-" Weird bug: the start pattern of single quote strings should match 1'string'.
-" It does if you search it in a buffer, but doesn't while highlighting.
-syn region urString start=/\H\d*\zs'/ skip=/\\\\\|\\'/ end=/'/
+syn region urString start=/\m\H\d*\zs'/ skip=/\\\\\|\\'/ end=/'/
 syn region urString start=/"/ skip=/\\\\\|\\"/ end=/"/
 
 syn match urEscSeq /\\[\\"'nrt]\|\\\d\{3\}\|\\x\x\{2\}/ contained containedin=urString
@@ -37,6 +35,9 @@ syn match urLCIdent  /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 syn match urFunction /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 
 syn match urUCIdent /\<[A-Z][A-Za-z0-9_']*\>/
+
+syn match urFieldName /#[A-Z][A-Za-z0-9_']*\>/
+syn match urFieldName /#\d\+\>/
 
 
 " Declarations
@@ -58,6 +59,7 @@ syn keyword urKeyword2 open export
 
 
 syn keyword urError error
+syn keyword urDebug debug naughtyDebug
 
 
 " Types
@@ -70,48 +72,58 @@ syn match   urType /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 
 
 " Infix operators
+syn match urOperator '='
+syn match urOperator '<>'
+syn match urOperator '+'
+syn match urOperator '-'
+syn match urOperator '\M*'
+syn match urOperator '/'
+syn match urOperator '%'
+syn match urOperator '>'
+syn match urOperator '<'
+syn match urOperator '>='
+syn match urOperator '<='
+
+syn match urOperator '\^'
+syn match urOperator '::'
+
+syn match urOperator '&&'
+syn match urOperator '||'
+
+syn match urOperator '++'
+syn match urOperator '--'
+syn match urOperator '---'
+
+syn match urOperator '<<<'
+syn match urOperator '>>>'
+syn match urOperator '<|'
+syn match urOperator '|>'
+
+syn match urOperator '<-'
+
+
 " FIXME
+syn match urInfix ':'
+syn match urInfix '::' contained
+syn match urInfix '=' contained
+syn match urInfix '\M*' contained
+
 syn match urInfix "-->"
 syn match urInfix "->"
 syn match urInfix "==>"
 syn match urInfix "=>"
-syn match urInfix "++"
-syn match urInfix "--"
-syn match urInfix "---"
-syn match urInfix "\^"
-syn match urInfix "&&"
-syn match urInfix "||"
-syn match urInfix "<<<"
-syn match urInfix ">>>"
-syn match urInfix "<|"
-syn match urInfix "|\>"
-syn match urInfix "="
-syn match urInfix "<>"
-syn match urInfix ">"
-syn match urInfix "<"
-syn match urInfix ">="
-syn match urInfix "<="
 syn match urInfix ","
 syn match urInfix ":::_"
 syn match urInfix ":::"
 syn match urInfix "::_"
-syn match urInfix "::"
-syn match urInfix ":"
 syn match urInfix "\.\.\."
 syn match urInfix "\."
 syn match urInfix "\$"
-syn match urInfix "#"
 syn match urInfix "__"
 syn match urInfix "\~"
 syn match urInfix "|"
-syn match urInfix "\*"
-syn match urInfix "<-"
 syn match urInfix ";"
 syn match urInfix "!"
-syn match urInfix "+"
-syn match urInfix "-"
-syn match urInfix "\/"
-syn match urInfix "%"
 syn match urInfix "@"
 
 
@@ -137,6 +149,7 @@ syn region urXmlComputed matchgroup=urDelim start='{\[\?' end='\]\?}' contains=A
 
 
 
+" Syntax links
 hi def link urInt       Number
 hi def link urReal      Float
 hi def link urBool      Boolean
@@ -153,6 +166,8 @@ hi def link urTodo      Todo
 hi def link urFunction  Function
 hi def link urLCIdent   Identifier
 
+hi def link urFieldName Identifier
+
 hi def link urFunDecl   Statement
 hi def link urDecl      Statement
 hi def link ursDecl     Statement
@@ -161,16 +176,19 @@ hi def link urCond      Conditional
 hi def link urKeyword   Keyword
 
 hi def link urError     Exception
+hi def link urDebug     Debug
 
 hi def link urKind      StorageClass
 hi def link urBaseType  Type
 hi def link urType      Typedef
 
+hi def link urOperator  Operator
 hi def link urInfix     PreProc
+
 hi def link urSql       Statement
 
 hi def link urXml       Comment
-hi def link urDelim     Delimiter
+hi def link urDelim     Comment
 
 
 let b:current_syntax = "ur"
