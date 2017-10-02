@@ -46,16 +46,26 @@ syn match   urDecl /\<val\(\srec\)\?\>/ nextgroup=urFunction skipwhite
 syn keyword urDecl con type datatype policy nextgroup=urType skipwhite
 syn keyword urDecl table view sequence cookie style task cookie nextgroup=urLCIdent skipwhite
 
-
-syn keyword urCond case of if then else
-syn keyword urKeyword fn let in where end
-
 syn keyword ursDecl class nextgroup=urType skipwhite
 
 " FIXME
 syn keyword urKeyword2 map constrain
-syn keyword urKeyword2 structure signature struct sig functor include
+syn keyword urKeyword2 structure signature functor include
 syn keyword urKeyword2 open export
+
+syn region urStruct matchgroup=urModule start=/\<struct\>/ end=/\<end\>/ contains=TOP
+syn region urSig    matchgroup=urModule start=/\<sig\>/ end=/\<end\>/ contains=TOP
+
+
+" Expressions
+syn keyword urKeyword fn
+
+syn region  urCase matchgroup=urCond start=/\<case\>/ end=/\<of\>/ contains=TOP
+syn region  urIfte matchgroup=urCond start=/\<if\>/ end=/\<else\>/ contains=TOP
+syn keyword urCond then contained containedin=urIfte
+
+syn keyword urKeyword in where contained containedin=urLet
+syn region  urLet matchgroup=urKeyword start=/\<let\>/ end=/\<end\>/ contains=TOP
 
 
 syn keyword urError error
@@ -72,37 +82,37 @@ syn match   urType /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 
 
 " Infix operators
-syn match urOperator '='
-syn match urOperator '<>'
-syn match urOperator '+'
-syn match urOperator '-'
-syn match urOperator '\M*'
-syn match urOperator '/'
-syn match urOperator '%'
-syn match urOperator '>'
-syn match urOperator '<'
-syn match urOperator '>='
-syn match urOperator '<='
+" =+-\*/%<>\^:&|
+syn match urInfix '='
+syn match urInfix '<>'
+syn match urInfix '+'
+syn match urInfix '-'
+syn match urInfix '\*'
+syn match urInfix '/'
+syn match urInfix '%'
+syn match urInfix '>'
+syn match urInfix '<'
+syn match urInfix '>='
+syn match urInfix '<='
 
-syn match urOperator '\^'
-syn match urOperator '::'
+syn match urInfix '\^'
+syn match urInfix '::'
 
-syn match urOperator '&&'
-syn match urOperator '||'
+syn match urInfix '&&'
+syn match urInfix '||'
 
-syn match urOperator '++'
-syn match urOperator '--'
-syn match urOperator '---'
+syn match urInfix '++'
+syn match urInfix '--'
+syn match urInfix '---'
 
-syn match urOperator '<<<'
-syn match urOperator '>>>'
-syn match urOperator '<|'
-syn match urOperator '|>'
+syn match urInfix '<<<'
+syn match urInfix '>>>'
+syn match urInfix '<|'
+syn match urInfix '|>'
 
-syn match urOperator '<-'
+syn match urInfix '<-'
 
 
-" FIXME
 syn match urInfix ':'
 syn match urInfix '::' contained
 syn match urInfix '=' contained
@@ -172,6 +182,8 @@ hi def link urFunDecl   Statement
 hi def link urDecl      Statement
 hi def link ursDecl     Statement
 
+hi def link urModule    Structure
+
 hi def link urCond      Conditional
 hi def link urKeyword   Keyword
 
@@ -182,13 +194,13 @@ hi def link urKind      StorageClass
 hi def link urBaseType  Type
 hi def link urType      Typedef
 
-hi def link urOperator  Operator
+hi def link urOperator  Special
 hi def link urInfix     PreProc
 
 hi def link urSql       Statement
 
-hi def link urXml       Comment
-hi def link urDelim     Comment
+hi def link urXml       Delimiter
+hi def link urDelim     Delimiter
 
 
 let b:current_syntax = "ur"
