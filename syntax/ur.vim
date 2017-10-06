@@ -3,7 +3,14 @@ if exists("b:current_syntax")
 end
 
 syn case match
+
+" Add `'` to the characters allowed in keywords
 syn iskeyword 48-57,A-Z,a-z,_,'
+
+
+" Main modes
+syn cluster urSignature contains=urSig
+syn cluster urImplement contains=urSig,urStruct
 
 
 " Constants
@@ -34,10 +41,14 @@ syn keyword urTodo contained TODO FIXME XXX
 syn match urLCIdent  /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 syn match urFunction /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 
-syn match urUCIdent /\<[A-Z][A-Za-z0-9_']*\>/
+syn match urUCIdent /\<[A-Z][A-Za-z0-9_']*\>/ contained
 
-syn match urFieldName /#[A-Z][A-Za-z0-9_']*\>/
+
+syn match urFieldName /\(#\|\<\)[A-Z][A-Za-z0-9_']*\>/
 syn match urFieldName /#\d\+\>/
+
+syn match urModule /\<[A-Z][A-Za-z0-9_']*\>/ contained
+syn match urModule /\<[A-Z][A-Za-z0-9_']*\./
 
 
 " Declarations
@@ -46,13 +57,26 @@ syn match   urDecl /\<val\(\srec\)\?\>/ nextgroup=urFunction skipwhite
 syn keyword urDecl con type datatype policy nextgroup=urType skipwhite
 syn keyword urDecl table view sequence cookie style task cookie nextgroup=urLCIdent skipwhite
 
-syn keyword ursDecl class nextgroup=urType skipwhite
+syn match   urDecl /\<open\(\sconstraints\)\?\>/ nextgroup=urModule skipwhite
+syn keyword urDecl structure signature nextgroup=urModule skipwhite
+
+"to remove later FIXME
+syn keyword urDecl class nextgroup=urType skipwhite
+syn keyword ursDecl include nextgroup=urModule skipwhite
+"FIXME
+syn keyword ursDecl structure signature include constraint contained containedin=urSig
+syn keyword ursDecl val nextgroup=urFunction skipwhite contained containedin=urSig
+syn keyword ursDecl con datatype class nextgroup=urType skipwhite contained containedin=urSig
+syn keyword ursDecl include structure signature nextgroup=urModule skipwhite contained containedin=urSig
 
 " FIXME
 syn keyword urKeyword2 map constrain
-syn keyword urKeyword2 structure signature functor include
-syn keyword urKeyword2 open export
+syn keyword urKeyword2 functor include
+syn keyword urKeyword2 export
+syn match   urKeyword2 /\<where\scon\>/ contained
 
+
+" Module delimiters
 syn region urStruct matchgroup=urModule start=/\<struct\>/ end=/\<end\>/ contains=TOP
 syn region urSig    matchgroup=urModule start=/\<sig\>/ end=/\<end\>/ contains=TOP
 
@@ -64,12 +88,14 @@ syn region  urCase matchgroup=urCond start=/\<case\>/ end=/\<of\>/ contains=TOP
 syn region  urIfte matchgroup=urCond start=/\<if\>/ end=/\<else\>/ contains=TOP
 syn keyword urCond then contained containedin=urIfte
 
-syn keyword urKeyword in where contained containedin=urLet
 syn region  urLet matchgroup=urKeyword start=/\<let\>/ end=/\<end\>/ contains=TOP
+syn keyword urKeyword in where contained containedin=urLet
 
 
+" Useful functions
 syn keyword urError error
 syn keyword urDebug debug naughtyDebug
+syn keyword urLOC _LOC_
 
 
 " Types
@@ -82,6 +108,9 @@ syn match   urType /\<[a-z_][A-Za-z0-9_']*\>/ display contained
 
 
 " Infix operators
+syn match urBackquoteError /[^a-zA-Z0-9_'\.]/ display contained
+syn region urBackquote matchgroup=urInfix start=/`/ end=/`/ contains=urBackquoteError,urFunction,urModule
+"FIXME
 " =+-\*/%<>\^:&|
 syn match urInfix '='
 syn match urInfix '<>'
@@ -116,7 +145,7 @@ syn match urInfix '<-'
 syn match urInfix ':'
 syn match urInfix '::' contained
 syn match urInfix '=' contained
-syn match urInfix '\M*' contained
+syn match urInfix '\*' contained
 
 syn match urInfix "-->"
 syn match urInfix "->"
@@ -145,7 +174,7 @@ syn keyword urSql HAVING UNION INTERSECT EXCEPT RANDOM AS JOIN ON CROSS
 syn keyword urSql INNER LEFT RIGHT FULL OUTER TRUE FALSE IS COALESCE COUNT
 syn keyword urSql IF THEN ELSE CURRENT_TIMESTAMP NOT AND OR LIKE AVG SUM MIN
 syn keyword urSql MAX ASC DESC OVER PARTITION RANK INSERT INTO VALUES UPDATE
-syn keyword urSql SET DELETE
+syn keyword urSql SET DELETE SQL
 
 
 " XML highlighting
@@ -155,7 +184,7 @@ unlet b:current_syntax
 syn match  urXml '<xml/>'
 syn region urXmlFragment matchgroup=urXml start='<xml>' end='<\/xml>' contains=@xml
 
-syn region urXmlComputed matchgroup=urDelim start='{\[\?' end='\]\?}' contains=ALLBUT,urType,urFunction,urLCIdent contained containedin=xmlTag,xmlTagName,xmlAttrib,urXmlFragment
+syn region urXmlComputed matchgroup=urDelim start='{\[\?' end='\]\?}' contains=TOP contained containedin=xmlTag,xmlTagName,xmlAttrib,urXmlFragment
 
 
 
@@ -189,6 +218,7 @@ hi def link urKeyword   Keyword
 
 hi def link urError     Exception
 hi def link urDebug     Debug
+hi def link urLOC       Macro
 
 hi def link urKind      StorageClass
 hi def link urBaseType  Type
@@ -201,6 +231,8 @@ hi def link urSql       Statement
 
 hi def link urXml       Delimiter
 hi def link urDelim     Delimiter
+
+hi def link urBackquoteError     Error
 
 
 let b:current_syntax = "ur"

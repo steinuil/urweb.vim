@@ -25,7 +25,8 @@ git clone https://github.com/steinuil/urweb.vim
 This package currently just improves the looks. If you want features, try [vim-addon-urweb](https://github.com/MarcWeber/vim-addon-urweb).
 
 # Known issues
-* No highlighting for some keywords, records, datatype constructors, module names, etc.
+* No highlighting for some keywords and other things
+* No highlighting for destructuring in left side of `val`
 * No differentiation between signature and implementation regions
 * Possible weird behavior with single-quoted string literals
 Example: ` 1'string ` is accepted by the compiler, but highlighted incorrectly in vim.
