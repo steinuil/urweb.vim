@@ -5,7 +5,7 @@ The syntax is mostly taken from Ur/Web's [lexer](https://github.com/urweb/urweb/
 
 ![screenshot of an Ur/Web file open in vim](https://github.com/steinuil/urweb.vim/raw/master/screenshot.png/)
 
-*The font is [Fixedsys Excelsior](http://www.fixedsysexcelsior.com/) and the colorscheme is [gruvbox](https://github.com/morhetz/gruvbox).*
+*The font is [Iosevka](https://github.com/be5invis/iosevka) and the colorscheme is [gruvbox](https://github.com/morhetz/gruvbox).*
 
 # Install
 I use Pathogen, so that's what these instructions are for. Feel free to contribute with more.
