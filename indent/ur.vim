@@ -14,15 +14,18 @@ setlocal indentexpr=GetUrIndent()
 
 " Copied from indent/ocaml.vim
 function! s:FindPair(pstart, pmid, pend)
+ "Position the cursor at the beginning of the end pattern
  call search(a:pend, 'bW')
- return indent(searchpair(a:pstart, a:pmid, a:pend, 'bWn', 'synIDattr(synID(line("."), col("."), 0), "name") =~? "string\\|comment"'))
+ return indent(searchpair(a:pstart, a:pmid, a:pend, 'bWn', 'synIDattr(synID(line("."), col("."), 0), "name") =~? "String\\|Comment"'))
 endfunction
 
 function! GetUrIndent()
-  let last_non_blank_line = prevnonblank(v:lnum)
+  let last_non_blank_line = prevnonblank(v:lnum - 1)
 
   " Don't indent at the beginning of a file
   if last_non_blank_line == 0
+    return 0
+  elseif cur_line - last_non_blank_line > 3
     return 0
   endif
 
@@ -36,9 +39,17 @@ function! GetUrIndent()
     return ind + shiftwidth()
   elseif prev_line =~ '^\s*\(ffi\|table\|val\|structure\|con\|cookie\)\>.*:\s*$'
     return ind + shiftwidth()
+  elseif prev_line =~ '^.*\<fn\>.\+=>\s*$'
+    return ind + shiftwidth()
+  elseif prev_line =~ '^.*\<\(if\|then\|else\)\s*$'
+    return ind + shiftwidth()
   endif
 
-  "let cur_line = getline(v:lnum)
+  let cur_line = getline(v:lnum)
+
+  if cur_line =~ '^\s*else\>'
+    return s:FindPair('\<if\>', '\<then\>', '\<else\>')
+  endif
 
   return ind
 endfunction

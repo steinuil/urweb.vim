@@ -21,12 +21,12 @@ git clone https://github.com/steinuil/urweb.vim
 * More colors and colored elements than the other syntax files
 * (Supposedly) correct syntax highlighting
 * XML fragments highlighting (using vim's XML highlighter)
+* Limited indentation support
 
 This package currently just improves the looks. If you want features, try [vim-addon-urweb](https://github.com/MarcWeber/vim-addon-urweb).
 
 # Known issues
-* No highlighting for some keywords and other things
-* No highlighting for destructuring in left side of `val`
 * No differentiation between signature and implementation regions
 * Possible weird behavior with single-quoted string literals
 Example: ` 1'string ` is accepted by the compiler, but highlighted incorrectly in vim.
+* No real recognition of SQL regions

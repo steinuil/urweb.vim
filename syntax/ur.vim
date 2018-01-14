@@ -8,7 +8,7 @@ syn case match
 syn iskeyword 48-57,A-Z,a-z,_,'
 
 
-" Main modes
+" Main modes (broken)
 syn cluster urSignature contains=urSig
 syn cluster urImplement contains=urSig,urStruct
 
@@ -97,7 +97,7 @@ syn match   urKind '{{\(Name\|Type\|Unit\)}}'
 syn match   urKind '{\(Name\|Type\|Unit\)}'
 
 syn keyword urTypeMap map
-syn match   urRecType '\$'
+syn match   urRcdType '\$'
 
 syn keyword urBaseType int float char string time blob
 
@@ -182,7 +182,7 @@ hi def link urDebug     Debug
 hi def link urLOC       Macro
 
 hi def link urKind      StorageClass
-hi def link urRecType   Special
+hi def link urRcdType   Special
 hi def link urTypeMap   Special
 hi def link urBaseType  Type
 hi def link urType      Typedef
